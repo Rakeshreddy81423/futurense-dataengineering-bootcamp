@@ -1,0 +1,13 @@
+flight_status_id,name
+1,Scheduled
+2,Delayed
+3,Departed
+4,In Air
+5,Expected
+6,Diverted
+7,Recovery
+8,Landed
+9,Arrived
+10,Cancelled
+11,No Takeoff
+12,Past Flight
