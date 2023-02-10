@@ -1,0 +1,91 @@
+-- 1
+select first_name,last_name,job_id,salary from employees
+where first_name like 's%';
+
+-- 2
+select * from employees 
+where salary = (select max(salary) from employees);
+
+-- 3
+
+select * from employees
+where salary = (select distinct (salary)
+from employees
+order by salary desc
+limit 1,1);
+
+-- 4
+with cte as
+(select concat(first_name,' ',last_name) as name, salary,
+dense_rank() over(order by salary desc) dr
+from employees)
+select * from cte where dr = 2 or dr = 3;
+
+-- 5
+select concat(e.first_name,' ',e.last_name) as name,e.salary,
+ concat(m.first_name,' ',m.last_name) as manager_name, m.salary as manager_salary from
+employees e left join employees m 
+on e.manager_id = m.employee_id;
+
+-- 6
+select manager_id,count(employee_id) as total from employees
+group by manager_id
+order by total desc;
+
+-- 7
+select department_id, count(employee_id) as total from employees
+group by department_id
+order by total desc;
+
+-- 8
+select year(hire_date) as year, count(employee_id) as total
+from employees
+group by year;
+
+-- 9
+select concat(min(salary),' to ',max(salary)) as sal_range from employees;
+-- 10
+with cte1 as
+(SELECT first_name, salary, NTILE(3) over(partition by salary) as 'nog'
+from employees)
+select nog, concat(min(salary), " to ", max(salary)) as 'salRange', count(*) as count
+from cte1
+group by nog
+;
+-- 11
+select * from employees where first_name like '%an%';
+
+-- 12 
+select concat(first_name,'-',last_name,'-',phone_number) as format from employees;
+
+-- 13
+select * from employees
+where monthname(hire_date) = 'August';
+
+-- 14
+select * from employees where salary > 
+(select avg(salary) from employees);
+
+-- 15
+select department_id,max(salary) as max_salary from employees
+group by department_id;
+
+-- 16 
+select * from employees order by salary 
+limit 5;
+
+-- 17
+select * from employees where year(hire_date) between 1980 and 1989;
+
+-- 18
+select reverse(first_name) rev_f, reverse(last_name) rev_l from employees;
+
+-- 19
+select * from employees where day(hire_date) between 16 and 31;
+
+-- 20
+
+select mgr.first_name, mgr.department_id, emp.first_name, emp.department_id
+from employees as emp inner join employees as mgr
+ON emp.manager_id = mgr.employee_id and emp.department_id <> mgr.department_id
+;

@@ -1,0 +1,87 @@
+/* DML Insert Update Delete Excercises */
+create table student
+(
+	sid int(5) not null unique,
+    s_fname varchar(20) not null,
+    s_lname varchar(30) not null
+);
+
+alter table student add constraint `PK_student` primary key(sid);
+
+create table course
+(
+	cid int(6) not null,
+    c_name varchar(30) not null
+);
+alter table course add constraint `PK_course` primary key(cid);
+
+create table course_grades
+(
+	cgid  int(7) not null unique,
+    semester char(4) not null,
+    cid int(6) not null,
+    sid int(5) not null,
+    grade char(2) not null
+);
+
+alter table course_grades add constraint `PK_coursegrades` primary key(cgid);
+
+alter table course_grades add constraint `FK_course_coursegrades` foreign key(cid)
+references course(cid);
+
+alter table course_grades add constraint `FK_course_coursegrades_2` foreign key(sid)
+references student(sid);
+
+insert into  student(sid,s_fname,s_lname) 
+values (12345,'Chris','Rock'),(23456,'Chris','Farley'),
+(34567, 'David','Spade'),
+(45678,'Liz','Lemon'),(56789,'Jack', 'Donaghy');
+
+insert into course (cid,c_name)
+values 
+(101001, 'Intro to Computers'),
+(101002, 'Programming'),
+(101003,'Databases'),
+(101004 ,'Websites'),
+(101005 ,'IS Management');
+
+insert into course_grades (cgid,semester,cid,sid,grade)
+values (2010101,'SP10', 101005, 34567, 'D+'),
+(2010308,'FA10', 101005, 34567, 'A-'),(2010309, 'FA10', 101001, 45678, 'B+'),
+(2011308, 'FA11' ,101003, 23456,'B-'),(2012206 ,'SU12', 101002, 56789 , 'A+');
+
+-- 3
+alter table student modify column s_fname varchar(30);
+
+-- 4 
+alter table course add column faculty_lname varchar(30) not null default 'TBD';
+
+-- 5 
+update course set faculty_lname = 'Potter',c_name = 'Intro to Wizardry' 
+
+
+where cid = 101001;
+
+-- 6
+alter table course rename column c_name to course_name;
+
+-- 7 
+select * from course;
+
+set sql_safe_updates = 0;
+delete from course where course_name = 'websites';
+
+
+-- 8
+alter table student drop primary key;
+alter table course_grades drop constraint `FK_course_coursegrades_2`;
+drop table student;
+
+-- 9
+alter table course_grades drop constraint `FK_course_coursegrades`;
+truncate table course;
+select * from course;
+
+-- 10
+alter table course_grades drop constraint `FK_course_coursegrades`;
+alter table course_grades drop constraint `FK_course_coursegrades_2`;

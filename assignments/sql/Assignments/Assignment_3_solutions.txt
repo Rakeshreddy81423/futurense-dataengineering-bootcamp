@@ -1,0 +1,48 @@
+/*DDL table creation Excercise */
+use assignments;
+
+
+create table patient
+(
+    pid int(7) not null unique,
+    p_name varchar(30) not null 
+);
+alter table patient add constraint `PK_patient` primary key(pid);
+create table treatment
+(
+    tid int(7) not null unique,
+    t_name varchar(30) not null 
+);
+
+alter table treatment add constraint `PK_treatment` primary key(tid);
+
+create table patient_treatment
+(
+    pid_pt int(7) not null,
+    tid_pt int(7) not null,
+    date   datetime not null
+    
+);
+
+alter table patient_treatment add constraint `PK_patient_treatment` primary key(pid_pt,tid_pt);
+alter table patient_treatment add constraint `FK_patient_patienttreatment` foreign key(pid_pt) references  patient(pid); 
+alter table patient_treatment add constraint `FK_patient_patienttreatment_2` foreign key(tid_pt) references  treatment(tid); 
+
+
+-- Assignment-3
+/* DDL Alter & Drop Excercise */
+
+-- 1
+alter table patient modify column p_name varchar(35);
+
+-- 2
+alter table patient_treatment add column dosage numeric not null default 0 check (dosage <=99);
+
+-- 3
+alter table treatment rename column t_name to treatment_name;
+
+-- 4 and 5
+alter table treatment drop primary key;
+alter table patient_treatment drop constraint `FK_patient_patienttreatment`;
+alter table patient_treatment drop constraint `FK_patient_patienttreatment_2`;
+drop table treatment;
