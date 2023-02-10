@@ -1,0 +1,150 @@
+OS: software helps a user to interact with the hardware components of a system.
+kernal : takes the instruction as highlevel language and pass the instruction to the hardware in the form
+	   of machine code.
+
+Linux:
+
+-> is a kernal which works on CLI (command line interface).
+-> open source : linux source code
+-> security : encryption, permission
+-> resource utilisation: Occupies less ram because there is  no UI
+-> cost effective: since it takes less ram
+
+Linux commands:
+----------------------
+pwd -> present working directory
+ls -> list all files and directories in the current directory
+date - > display date
+whoami  -> shows the current user
+cd .. -> go to the previous directory
+man -> manual for the commands
+ls - la -> shows all the hidden files
+ls -l -> shows all the files in a vertical format (long list format) 
+
+cat  -> used to view the content of the file
+	cat file.txt
+mkdir -> create a directory
+	mkdir dir_name
+
+touch -> create an empty file
+	touch filename.txt f1.txt f2.txt .....
+	we can create any number of files at a time
+vi -> to edit the file
+	vi hello.txt
+	* we cannot direclty insert the data into the file
+	*  i  -> type i to insert the data
+	* esc -> to go out of insert mode
+	* :w  -> to write/save the file
+	* :wq  -> save the file and quit
+
+cp -> copy content from one file to another
+	* cp hello.txt hello1.txt
+	* cp hello.txt /rakesh/dir1   => cp file to a directory
+	*  below copies all the files start with filename hell
+		cp hell* dir1
+	* cp *.csv dir2 
+		copies all the csv files to dir2
+	* cp dir/* .
+		copy all the files in dir folder to pwd
+	
+
+
+mv -> move files from one dir to another
+	* mv hello.txt /home/ubuntu/rakesh/dir2
+	* move files using wild card 
+	* below command moves all the filenames contain ll moved to dir2
+		mv *ll* dir2
+	* mv dir/* .
+		move  all the files in dir folder to pwd
+	
+	
+
+rm -> remove file from the dir
+	* rm hello.txt
+	*
+
+rm -r -> remove recursive
+	*  used to delete a directory 
+	* rm -r dir2
+
+[dir/file] [owner] [group] [other]
+d              rwx        rwx       rwx
+	      421       421       421
+
+chmod -> change the permissions for files or dir
+	* chmod +x hello.txt 
+		give execute permission for hello.txt
+	* chmod -x hello.txt
+		remove execute permission for hello.txt
+	* in chmod we can also metion numbers 
+		chmod 777 hell.txt  => indicates all access to everyone
+
+
+
+
+history -> shows all the commands which are executed
+	output will be like
+	1 ls
+	2 pwd
+	3 mkdir rakesh
+	* to execute commands from the history 
+		!<number>
+		!2
+
+sudo -> access root user
+
+
+head -> to see some records of the file at top
+	* first two records
+		head -2 hello.txt
+tail -> to see some records at the bottom of the file
+	* read last two records
+		tail -2 hello.txt
+
+ps -> see the current processes running
+
+ps -ef -> shows all the processes running by all the users
+
+kill -> to kill the processes
+
+
+chmod o+w hello.txt -> giving  write permission to hello file
+chmod u+r,g+w hello.txt   -> giving read to user and write to group for the hello file
+
+
+sudo su  -> root user
+
+ps -ef | sort -r
+
+* the | is pipeline in the command
+* the sort -r is applied on the output of the ps -ef
+
+
+filtering the files using grep
+
+ls -l grep "hello*"
+
+
+ls -l grep -i "hello*"  -> find files case insensitive
+
+
+date > now   => date result will be stored into a new file called now
+
+date >> now   => appending date to the now file
+
+
+* copy all the cities having New into new_cities file
+cat cities.txt | grep "New*" > new_cities.txt
+
+
+* replace words in a file
+cat new_cities.txt | grep -i new | sed 's/New/Old/' > ocities.txt
+
+
+
+
+
+
+
+
+

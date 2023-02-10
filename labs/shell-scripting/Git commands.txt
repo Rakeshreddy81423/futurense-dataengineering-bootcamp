@@ -1,0 +1,24 @@
+Check in process:
+----------------------
+git clone <url to clone>
+
+git add .
+
+git add <filename>
+
+git commit -m "some message"
+
+git push
+
+
+To check the status of files:
+-----------------------
+git status
+
+
+
+
+
+
+
+

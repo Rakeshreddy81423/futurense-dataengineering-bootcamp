@@ -1,0 +1,54 @@
+# is for  write  commands  in the sh file
+
+
+->  to execute the .sh files
+	 sh filename.sh
+	 bash filename.sh
+	./sscript.sh
+
+
+->   #!/bin/bash
+	*  is included as first line in the .sh file
+	* Even without the above line it can run
+	* but it is good practice to include the above line.
+
+-> Taking input from the user 
+	read name
+	 * read is used to get input from the user
+	* name is a variable to take the input
+
+-> $name
+	* use $ to access the data in the variable
+	 
+
+Special- variables
+--------------------------
+$0, $1 ....
+$#  -> count of arguments
+$*  -> prints all the arguments as a single string
+$@ -> prints all the arguments as a seperate strings.
+$HOME 
+$$ -> prints processID
+$? -> status of the last command
+
+Arithmetic operations
+--------------------------
+
+
+
+
+
+Assignment:
+--------------
+1.) create a directory
+2.) create file "cities.txt"
+3.) add city names into the file
+4.) filter cities contains 'New'"
+5.) replace 'new' with 'old'
+6.) write output to 'old-cities.txt'
+
+
+
+
+
+
