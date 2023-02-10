@@ -1,0 +1,36 @@
+
+s3
+**********
+1.) create bucket 
+aws s3 mb s3://mybucketcloud
+
+2.) delete empty bucket
+aws s3 rb s3://mybktcloud
+
+3.) upload a folder from local to s3
+aws s3 sync C:\Users\rakes\OneDrive\Desktop\sql_interview s3://mybkt-1
+
+
+4.) move a file from local path to s3 bucket
+
+aws s3 mv C:\Users\rakes\OneDrive\Desktop\sql_interview.txt s3://mybkt-1
+
+
+EC2
+-------
+
+=> create EC2 instance 
+=> for ami
+    1.) In console click on EC2 and launch instance .
+    2.) Under browse ami choose the ami id 
+=> key-name
+    1.) choose a key-pair which is already created or we can create new 
+==> sub-net and security group 
+	1.) select the default values 
+
+
+aws ec2 run-instances --image-id ami-0b5eea76982371e91 --count 1 --instance-type t2.micro --key-name cloudguy1 --security-group-ids sg-01d7dd16626c3bcf1 --subnet-id subnet-0582e7f27270fb00a
+
+
+--- command to give key-values 
+aws ec2 create-tags --resources i-0f830ba310f71b46c --tags Key=Name,Value=MyInstance
