@@ -1,4 +1,5 @@
-Question: The ratings dataset has ratings for the movies. Using MR find the count for each rating.
+Question:
+ The ratings dataset has ratings for the movies. Using MapReducefind the count for each rating.
 ------------------------------------------------------------------------------------------------------------------------
 Code
 
