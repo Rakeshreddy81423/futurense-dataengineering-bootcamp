@@ -1,0 +1,42 @@
+Question: The ratings dataset has ratings for the movies. Using MR find the count for each rating.
+------------------------------------------------------------------------------------------------------------------------
+Code
+
+******************************
+from mrjob.job import MRJob
+
+class Count(MRJob):
+
+        """ The below mapper() function defines the mapper for MapReduce and takes
+        key value argument and generates the output in tuple format .
+        The mapper below is splitting the line and generating a word with its own
+        count i.e. 1 """
+        def mapper(self, _, line):
+                # for word in line.split():
+                #         yield(word, 1)
+                yield(line.split(",")[2],1)
+                        
+        """ The below reducer() is aggregating the result according to their key and
+        producing the output in a key-value format with its total count"""
+        def reducer(self, word, counts):
+                yield(word, sum(counts))
+
+"""the below 2 lines are ensuring the execution of mrjob, the program will not
+execute without them"""
+if __name__ == '__main__':
+        Count.run()
+
+
+Output
+*************
+"0.5"   1370
+"3.0"   20047
+"5.0"   13211
+"rating"        1
+"4.0"   26818
+"2.5"   5550
+"1.5"   1791
+"2.0"   7551
+"3.5"   13136
+"4.5"   8551
+"1.0"   2811

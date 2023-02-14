@@ -10,13 +10,12 @@ Order the result in descending order of the percentage found.
 select *,hospEx_medicine_count / total_medicine * 100 as percentage from(
 	select ph.pharmacyID,ph.pharmacyName,sum( case when m.hospitalExclusive = 'S' then c.quantity else 0 end) as hospEx_medicine_count,
     sum(c.quantity) as total_medicine
-	from treatment t
+	from (select * from treatment where year(date) = 2022) t
 	inner join prescription pre on t.treatmentID = pre.treatmentID
 	inner join contain c on pre.prescriptionID = c.prescriptionID
 	inner join medicine m on c.medicineID  = m.medicineID
 	inner join keep k on m.medicineID = k.medicineID
 	inner join pharmacy ph on k.pharmacyID = ph.pharmacyID
-	where year(t.date) = 2022
 	group by ph.pharmacyID,ph.pharmacyName
 ) a
 order by percentage desc;
@@ -50,9 +49,8 @@ with cte1 as
 	select ad.state,t.diseaseID, count(t.treatmentID) as treat_count
 	from address ad inner join person p
 	on ad.addressID = p.addressID
-	inner join treatment t
+	inner join (select * from treatment where year(date) = 2022) t
 	on p.personID = t.patientID
-	where year(t.date) = 2022
 	group by ad.state,t.diseaseID
 ),
 cte2 as 

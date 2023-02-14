@@ -108,7 +108,7 @@ ps -ef -> shows all the processes running by all the users
 kill -> to kill the processes
 
 
-chmod o+w hello.txt -> giving  write permission to hello file
+chmod o+w hello.txt -> giving  write permission to for others on  hello file
 chmod u+r,g+w hello.txt   -> giving read to user and write to group for the hello file
 
 
@@ -138,7 +138,7 @@ cat cities.txt | grep "New*" > new_cities.txt
 
 
 * replace words in a file
-cat new_cities.txt | grep -i new | sed 's/New/Old/' > ocities.txt
+cat new_cities.txt | grep -i new | sed 's/New/Old/g' > ocities.txt
 
 
 
