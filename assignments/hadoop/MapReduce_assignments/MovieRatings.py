@@ -1,9 +1,3 @@
-Question:
- The ratings dataset has ratings for the movies. Using MapReducefind the count for each rating.
-------------------------------------------------------------------------------------------------------------------------
-Code
-
-******************************
 from mrjob.job import MRJob
 
 class Count(MRJob):
@@ -32,16 +26,3 @@ class Count(MRJob):
 execute without them"""
 if __name__ == '__main__':
         Count.run()
-
-Output
-*************
-0.5     1370
-3.0     20047
-5.0     13211
-4.0     26818
-2.5     5550
-1.5     1791
-2.0     7551
-3.5     13136
-4.5     8551
-1.0     2811
