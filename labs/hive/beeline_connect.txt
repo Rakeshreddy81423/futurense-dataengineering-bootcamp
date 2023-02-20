@@ -1,0 +1,1 @@
+ !connect jdbc:hive2:// bigdata bigdata
