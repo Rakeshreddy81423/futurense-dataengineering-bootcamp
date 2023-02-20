@@ -1,0 +1,42 @@
+1. Load data and create a Hive table
+
+# create an external table and load the data
+
+create table if not exists bankmarket
+(
+age int,
+job String,
+martial String,
+education String,
+default String,
+balance int,
+housing String,
+loan String,
+contact String,
+day int,
+month String,
+duration int,
+campaign int,
+pdays int,
+previous int,
+poutcome String,
+y String
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ';'
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+
+# load the data from local
+
+load data inpath '/user/training/retail/retail_input/bankmarketdata.csv' overwrite into table bankmarket_ext;
+
+
+
+2. Give marketing success rate. (No. of people subscribed / total no. of entries)
+
+select count(poutcome) from bankmarket_ext where poutcome = 'success';
+
+
