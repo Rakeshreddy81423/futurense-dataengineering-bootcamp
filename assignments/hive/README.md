@@ -6,3 +6,6 @@
    #### Working with the weather_data.csv. Finding min, max temps. And min, max temps for every month
 ### Assignment 3:
    #### Working with customers and transactions data. Performed some analytical queries on top of it.
+   
+### Case Study
+   #### Analysing the bankmarket data about bank term deposits. The marketing campaigns were based on phone calls.
