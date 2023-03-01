@@ -1,5 +1,5 @@
-Assignment -3
-****************
+/*Assignment -3
+**************** */
 
 # There are two files customer.txt and transactions.txt
 # Both are commaseperated
@@ -55,15 +55,15 @@ location '/user/training/retail/transactions'
 	load data local inpath '/home/cloudera/Desktop/hive/hive_futurense/dataset/retail/transactions.txt' overwrite into table transactions_ext;
 
 
-Analysis
-**********
-
-1.) No of transactions by customer
+/* Analysis
+********** */
+ 
+ /* 1.) No of transactions by customer */
 
 	select cust_id, count(trans_id) as trans_count from transactions_ext group by cust_id;
 
-Output
-*********
+/* Output
+********* */
 +----------+--------------+--+
 | cust_id  | trans_count  |
 +----------+--------------+--+
@@ -80,12 +80,12 @@ Output
 +----------+--------------+--+
 
 
-2) Total transaction amount by customer
+/* 2) Total transaction amount by customer */
 
 	select cust_id, sum(amount) as total_amount from transactions_ext group by cust_id;
 
-Output
-*********
+/* Output
+********* 
 +----------+---------------------+--+
 | cust_id  |    total_amount     |
 +----------+---------------------+--+
@@ -102,11 +102,11 @@ Output
 +----------+---------------------+--+
 
 
-3.) Get top 3 customers by transaction amount
+3.) Get top 3 customers by transaction amount  */
 
 	select cust_id, sum(amount) as total_amount from transactions_ext group by cust_id order by total_amount desc limit 3;
  
-Output
+/* Output
 ********
 +----------+--------------------+--+
 | cust_id  |    total_amount    |
@@ -114,14 +114,14 @@ Output
 | 4000008  | 859.42             |
 | 4000002  | 706.97             |
 | 4000007  | 699.5500000000001  |
-+----------+--------------------+--+
++----------+--------------------+--+ 
 
 	
-4.) 4) No of transactions by customer and mode of payment
+4.) 4) No of transactions by customer and mode of payment */
 
 select cust_id, pymt_mode,count(trans_id) as trans_count from transactions_ext group by cust_id, pymt_mode;
 
-Output:
+/* Output:
 *********
 +----------+------------+--------------+--+
 | cust_id  | pymt_mode  | trans_count  |
@@ -140,9 +140,9 @@ Output:
 | 4000008  | credit     | 10           |
 | 4000009  | credit     | 6            |
 | 4000010  | credit     | 6            |
-+----------+------------+--------------+--+
++----------+------------+--------------+--+  
 
-5.) 5) Get top 3 cities which has more transactions
+5.) 5) Get top 3 cities which has more transactions */
 	select city, count(trans_id) as trans_count from transactions_ext group by city order by trans_count desc limit 3;
 
 Output:
