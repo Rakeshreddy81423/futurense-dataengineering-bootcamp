@@ -1,5 +1,5 @@
-// Assignment -3
-// **************** 
+# Assignment -3
+ **************** 
 
 # There are two files customer.txt and transactions.txt
 # Both are commaseperated
