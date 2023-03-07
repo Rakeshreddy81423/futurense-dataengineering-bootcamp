@@ -93,8 +93,24 @@ def find_group(age):
 '''
 h) Check if marital status mattered for subscription to deposit.
 '''
+bank_filtered = bank.filter(lambda row : row[-1] == '"yes"')
 
+marital = bank_filtered.map(lambda row : (row[2],1))
+
+
+marital.reduceByKey(lambda a,b:a+b).collect()
+
+#output : [('"married"', 2755), ('"single"', 1912), ('"divorced"', 622)]
 
 '''
 i) Check if age and marital status together mattered for subscription to deposit scheme
 '''
+age_marital = bank_filtered.map(lambda row : ((int(row[0]),row[2].strip('"')),1))
+
+age_marital.reduceByKey(lambda a,b :a + b).collect()
+
+
+
+
+
+
