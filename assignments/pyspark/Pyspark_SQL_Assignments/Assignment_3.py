@@ -45,11 +45,12 @@ spark = SparkSession.builder.appName("assignment3").getOrCreate()
 bank_df = spark.read.csv(path='/home/bigdata/bankmarketdata.csv',header=True,sep=';',inferSchema=True)
 
 # b) Get AgeGroup wise SubscriptionCount
-age_grp_df = bank_df.filter(col('y') == 'yes').withColumn('AgeGroup',when(col('age') <= 20 , 'Teenagers')\
-														 .when((col('age') >=21) & (col('age') <= 40) , 'Youngsters')\
-														 .when((col('age') >=41) & (col('age') <= 60) , 'MiddleAgers')\
-														 .otherwise('Seniors')
-														 )
+age_grp_df = bank_df.filter(col('y') == 'yes')\
+					.withColumn('AgeGroup',when(col('age') <= 20 , 'Teenagers')\
+								.when((col('age') >=21) & (col('age') <= 40) , 'Youngsters')\
+								.when((col('age') >=41) & (col('age') <= 60) , 'MiddleAgers')\
+								.otherwise('Seniors')\
+								)
 
 subscriptions = age_grp_df.groupBy('AgeGroup').agg(count('y').alias('SubscriptionCount'))
 
