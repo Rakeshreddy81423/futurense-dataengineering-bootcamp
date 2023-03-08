@@ -61,6 +61,18 @@ parquet_bank_df = spark.read.parquet('/home/bigdata/assignment3_out/parquet_out'
 # e) Show the data
 parquet_bank_df.show()
 
+'''
++-----------+-----------------+
+|   AgeGroup|SubscriptionCount|
++-----------+-----------------+
+| Youngsters|             2924|
+|    Seniors|              502|
+|  Teenagers|               33|
+|MiddleAgers|             1830|
++-----------+-----------------+
+'''
+
+
 # f) Filter AgeGroup with SubcriptionCount > 2000 and write into Avro file format
 subscriptions_filter = parquet_bank_df.filter(col('SubscriptionCount') > 2000)
 
@@ -72,3 +84,11 @@ avro_df = spark.read.format('avro').load('/home/bigdata/assignment3_out/avro_out
 # h) Show the data
 avro_df.show()
 
+
+'''
++----------+-----------------+
+|  AgeGroup|SubscriptionCount|
++----------+-----------------+
+|Youngsters|             2924|
++----------+-----------------+
+'''
