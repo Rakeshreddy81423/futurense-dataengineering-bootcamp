@@ -1,7 +1,4 @@
-import pyspark
 
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import *
 
 '''
 Spark dont have packages internally to handle AVRO files. So we need to pass those packages explicitly in spark-submit
@@ -37,6 +34,10 @@ Scheduling can be done using crontab
 
 
 '''
+import pyspark
+
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import *
 
 spark = SparkSession.builder.appName("assignment3").getOrCreate()
 
