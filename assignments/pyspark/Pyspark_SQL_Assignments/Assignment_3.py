@@ -22,14 +22,14 @@ Running spark in cluster mode.
 		spark-submit --master spark://Rakesh.localdomain:7077 --packages org.apache.spark:spark-avro_2.12:3.3.2 Assignment_3.py
 
 
-scheduling
+Scheduling
 **************
 Scheduling can be done using crontab
 1.) start the cron serice
 		sudo service cron start
 2.) Check and confirm whether cron is running
 		sudo service cron status
-3.) Open crotab and mention the schedule
+3.) Open crontab and mention the schedule
 		crontab -e
 	* It will open a file and metion the schedule 
 		1 * * * * /path/to/file.py
@@ -37,7 +37,7 @@ Scheduling can be done using crontab
 
 '''
 
-spark = SparkSession.builder.appName("assignment2").getOrCreate()
+spark = SparkSession.builder.appName("assignment3").getOrCreate()
 
 # a) Load Bank Marketing Campaign Data from csv file
 bank_df = spark.read.csv(path='/home/bigdata/bankmarketdata.csv',header=True,sep=';',inferSchema=True)
