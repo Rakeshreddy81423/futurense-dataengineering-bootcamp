@@ -31,8 +31,9 @@ Scheduling can be done using crontab
 		sudo service cron status
 3.) Open crontab and mention the schedule
 		crontab -e
-	* It will open a file and metion the schedule 
+	* It will open a file and mention the schedule.
 		1 * * * * /path/to/file.py
+	* The above line of code is to execute .py file every minute
 
 
 '''
