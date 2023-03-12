@@ -89,9 +89,3 @@ group by p.pharmacyID;
 
 
 
-
-
-
-
-
-
