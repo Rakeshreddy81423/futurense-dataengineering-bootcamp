@@ -1,0 +1,314 @@
+create external table query_1
+(
+diseaseName string,
+male int,
+female int,
+ratio double
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n';
+
+insert into table query_1 
+select *, round((male/female),2) as m_f_ratio from
+(
+select d.diseaseName,
+sum(case when gender = 'male' then 1 else 0 end ) as male,
+sum(case when gender = 'female' then 1 else 0 end ) as female
+from person p inner join treatment t
+on p.personid = t.patientid
+inner join disease d
+on t.diseaseID = d.diseaseID
+group by d.diseaseName
+) a;
+
+
+=================
+create external table query_2(
+gender string,
+total_treatments int,
+total_claims int,
+ratio double)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n';
+
+insert into table query_2
+select *, round(total_treatments/ total_claims, 2) as ratio from 
+(
+select p.gender, count(t.treatmentID) as total_treatments,
+count(c.claimID) as total_claims from
+person p inner join treatment t
+on p.personID = t.patientID
+left join claim c
+on t.claimID = c.claimID
+group by p.gender
+)a;
+
+
+====================
+sqoop export
+====================
+sqoop export --connect jdbc:mysql://localhost:3306/healthcare --username root --password cloudera --table query_1 --export-dir /user/hive/warehouse/query_1  --input-fields-terminated-by ','
+sqoop export --connect jdbc:mysql://localhost:3306/healthcare --username root --password cloudera --table query_2 --export-dir /user/hive/warehouse/query_2  --input-fields-terminated-by ','
+
+mysql tables
+============
+create table query_1
+(
+diseaseName varchar(15),
+male int,
+female int,
+ratio double
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n';
+
+create table query_2(
+gender varchar(10),
+total_treatments int,
+total_claims int,
+ratio double);
+
+
+
+
+=============
+partitioning - bucketing
+===============
+
+partitioning on address table
+-----------------------------
+create table if not exists address_part
+(
+addressid int,
+address1 string,
+city string,
+zip int
+)
+partitioned by (state string)
+row format delimited
+fields terminated by ','
+stored as textfile;
+
+insert into address_part table
+------------------------------
+insert into address_part
+partition(state)  
+select addressid,address1,city,zip,state
+from address;  
+
+
+partitioning on treatment table
+----------------------------
+create table if not exists treatment_part_bkt
+(
+treatmentid int,
+date string,
+patientid int,
+diseaseid int,
+claimid int
+)
+partitioned by (year string)
+clustered by (treatmentid) into 3 buckets
+row format delimited
+fields terminated by ','
+stored as textfile
+
+
+insert into treatment_part_bkt
+partition(year)
+select treatmentid,date,patientid,diseaseid,claimid, year(date) as year from treatment;
+
+
+problem statement -3
+-------------------------
+/*
+	The State of Alabama (AL) is trying to manage its healthcare resources more efficiently.
+    For each city in their state, they need to identify the disease for which the maximum number of patients have gone for treatment.
+    Assist the state for this purpose.
+Note: The state of Alabama is represented as AL in Address Table.
+
+*/
+
+external table for query_3:
+--------------------------
+create external table query_3
+(
+city string,
+diseasename string,
+pat_count int
+)
+row format delimited
+fields terminated by ','
+stored as textfile;
+
+
+insert into query_3
+----------------------
+with cte as
+(
+select city,d.diseaseName, count(patientID) as pat_count
+from (select * from address_part where state='AL') ad inner join person p
+on ad.addressID = p.addressID
+inner join treatment t 
+on personID = t.patientID
+inner join disease as d
+on t.diseaseID = d.diseaseID
+group by city,diseaseName
+),
+cte2 as
+(
+select  city,diseaseName,pat_count, dense_rank() over(partition by city order by pat_count desc) as dn from cte
+)
+insert into query_3 select city,diseaseName,pat_count from cte2 where dn = 1;
+
+
+
+
+problem statement -4
+ /*
+	Sarah, from the healthcare department, is trying to understand if some diseases are spreading in a particular region. 
+    Assist Sarah by creating a report which shows each state the number of the most and least treated diseases by the patients of that state in the year 2022. 
+    It would be helpful for Sarah if the aggregation for the different combinations is found as well. Assist Sarah to create this report. 
+ */
+
+
+
+
+external table for query_4
+-------------------------
+create external table query_4
+(
+state string,
+diseaseid int,
+treatCount int
+)
+row format delimited
+fields terminated by ','
+stored as textfile;
+
+insert into query_4
+-------------------
+
+with cte as
+(
+select ad.state,t.diseaseID, count(t.treatmentID) as treat_count
+from address_part ad inner join person p
+on ad.addressID = p.addressID
+inner join (select * from treatment_part_bkt where year = 2022) t
+on p.personID = t.patientID
+group by ad.state,t.diseaseID 
+),
+cte_2 as
+( 
+select *, dense_rank() over(partition  by state order by treat_count desc) as dn_desc,
+dense_rank() over(partition  by state order by treat_count ) as dn_asc from cte
+)
+insert into query_4
+select state,diseaseID,treat_count from cte_2 where dn_desc = 1
+union all
+select state,diseaseID,treat_count from cte_2 where dn_asc = 1
+order by state;
+
+
+
+Problem statement -5
+--------------------
+Brooke is trying to figure out if patients with a particular disease are preferring some pharmacies over others or not, 
+For this purpose, she has requested a detailed pharmacy report that shows each pharmacy name, 
+and how many prescriptions they have prescribed for each disease in 2021 and 2022, 
+She expects the number of prescriptions prescribed in 2021 and 2022 be displayed in two separate columns.
+Write a query for Brooke’s requirement.
+
+external table 
+--------------
+create external table if not exists query_5
+(
+pharmacyname string,
+diseaseid int,
+year_2021 int,
+year_2022 int
+)
+row format delimited
+fields terminated by ','
+stored as textfile;
+
+
+insert into query_5 table
+------------------------
+insert into query_5
+select ph.pharmacyName,t.diseaseID,
+sum(case when year(t.date) = 2021 then 1 else 0 end) as year_2021,
+sum(case when year(t.date) = 2022 then 1 else 0 end) as year_2022
+from pharmacy ph
+inner join prescription pr on ph.pharmacyID = pr.pharmacyID
+inner join (select * from treatment_part_bkt where year in (2021,2022)) t on pr.treatmentID = t.treatmentID
+group by ph.pharmacyName,t.diseaseID;
+
+
+
+MySQL tables
+------------
+create table if not exists query_1
+(
+diseaseName varchar(200),
+male int,
+female int,
+ratio double
+);
+
+create table if not exists query_2
+(
+gender varchar(10),
+total_treatments int,
+total_claims int,
+ratio double
+);
+
+create table if not exists query_3
+(
+city varchar(100),
+diseasename varchar(200),
+pat_count int
+);
+
+
+create table if not exists query_4
+(
+state varchar(20),
+diseaseid int,
+treatCount int
+);
+
+
+create table if not exists query_5
+(
+pharmacyname varchar(100),
+diseaseid int,
+year_2021 int,
+year_2022 int
+);
+
+
+
+Sqoop commands
+==================
+Export table query_1
+---------
+sqoop export --connect jdbc:mysql://localhost:3306/healthcare --username root --password cloudera --table query_1 --export-dir /user/hive/warehouse/query_1  --input-fields-terminated-by ','
+
+Export table query_2
+----------
+sqoop export --connect jdbc:mysql://localhost:3306/healthcare --username root --password cloudera --table query_2 --export-dir /user/hive/warehouse/query_2  --input-fields-terminated-by ','
+
+Export table query_3
+-----------
+sqoop export --connect jdbc:mysql://localhost:3306/healthcare --username root --password cloudera --table query_3 --export-dir /user/hive/warehouse/query_3  --input-fields-terminated-by ','
+
+
+Export table query_4
+-------------
+sqoop export --connect jdbc:mysql://localhost:3306/healthcare --username root --password cloudera --table query_4 --export-dir /user/hive/warehouse/query_4  --input-fields-terminated-by ','
+
+Export table query_5
+----------
+sqoop export --connect jdbc:mysql://localhost:3306/healthcare --username root --password cloudera --table query_5 --export-dir /user/hive/warehouse/query_5  --input-fields-terminated-by ','

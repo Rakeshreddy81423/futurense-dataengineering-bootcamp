@@ -77,8 +77,7 @@ sum(case
 end) as '2022'
 from pharmacy ph
 inner join prescription pr on ph.pharmacyID = pr.pharmacyID
-inner join treatment t on pr.treatmentID = t.treatmentID
-where year(t.date) in (2021,2022)
+inner join (select * from treatment where year(date) in (2021,2022)) t on pr.treatmentID = t.treatmentID
 group by ph.pharmacyName,t.diseaseID;
 
 

@@ -1,5 +1,6 @@
 use healthcare;
 
+
 /*
 Brian, the healthcare department, has requested for a report that shows for each state how many people underwent treatment for the disease “Autism”.  
 He expects the report to show the data for each state as well as each gender and for each state and gender combination. 

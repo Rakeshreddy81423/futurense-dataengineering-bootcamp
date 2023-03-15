@@ -1,5 +1,6 @@
 use healthcare;
 
+
 --   Jimmy, from the healthcare department, has requested a report that shows how the number of treatments each age category of patients has gone through in the year 2022. 
 -- The age category is as follows, Children (00-14 years), Youth (15-24 years), Adults (25-64 years), and Seniors (65 years and over).
 -- Assist Jimmy in generating the report.
@@ -17,7 +18,6 @@ end) as adults,
 sum(case
 	when timestampdiff(year,p.dob,t.date) >=65 then 1 else 0
 end) as seniors
-
  from 
 patient p inner join treatment t 
 on p.patientID=t.patientID

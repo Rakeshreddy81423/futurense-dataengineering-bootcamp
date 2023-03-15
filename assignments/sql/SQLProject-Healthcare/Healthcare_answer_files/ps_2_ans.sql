@@ -42,7 +42,9 @@ with cte as
 	group by city,diseaseName
 ),
 cte2 as
-(select  city,diseaseName,pat_count, dense_rank() over(partition by city order by pat_count desc) as dn from cte)
+(
+select  city,diseaseName,pat_count, dense_rank() over(partition by city order by pat_count desc) as dn from cte
+)
 select city,diseaseName,pat_count from cte2 where dn = 1;
 
 
