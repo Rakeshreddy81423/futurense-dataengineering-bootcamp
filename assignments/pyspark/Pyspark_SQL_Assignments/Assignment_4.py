@@ -16,3 +16,7 @@ spark-submit --packages org.apache.spark:spark-avro_2.12:3.3.2
 spark-submit \
 --packages org.apache.spark:spark-avro_2.12:3.3.2 \
 --jars "/home/bigdata/mysql-connector-j-8.0.32/mysql-connector-j-8.0.32.jar" bank_export.py
+
+
+
+--jars "/home/bigdata/mysql-connector-j-8.0.32/mysql-connector-j-8.0.32.jar" bank_marketing-transformation.py
