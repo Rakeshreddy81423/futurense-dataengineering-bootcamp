@@ -9,3 +9,7 @@
    
 ### Case Study
    #### Analysing the bankmarket data about bank term deposits. The marketing campaigns were based on phone calls.
+   
+### Healthcare Analytics Project
+   
+![Screenshot 2023-03-18 134642](https://user-images.githubusercontent.com/45210453/226094183-3a6ca4b3-cda6-4b33-8d51-0fcafc7b7fe5.png)
